@@ -1,6 +1,19 @@
-var htmlStr = "";
-//onclick event
+//upload input file
+function uploadFile() {
+  console.log("file uploaded!");
+  var file = document.getElementById("customFile").files[0];
+  if (file) {
+    //if a file is uploaded
+    var fileInfoDiv = document.getElementById("fileInfo");
+    fileInfoDiv.innerHTML =
+      "<p>You've uploaded this file: " + file.name + "</p>";
+    // fileInfoDiv.innerText = "file name: ${file.name}";
+  }
+}
 
+var htmlStr = "";
+
+//onclick event
 function runFunc() {
   //import Geoprocessor from "@arcgis/core/rest/geoprocessor";
   console.log("run button is clicked");
