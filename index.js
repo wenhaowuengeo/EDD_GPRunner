@@ -3,11 +3,41 @@ function uploadFile() {
   console.log("file uploaded!");
   var file = document.getElementById("customFile").files[0];
   if (file) {
+    console.log("file is uploaded");
     //if a file is uploaded
     var fileInfoDiv = document.getElementById("fileInfo");
     fileInfoDiv.innerHTML =
       "<p>You've uploaded this file: " + file.name + "</p>";
     // fileInfoDiv.innerText = "file name: ${file.name}";
+
+    //Not working:
+    // readXlsxFile(file).then(function(rows){
+    //   console.log(rows);
+    // })
+
+    console.log("file", file);
+    console.log("type of file", typeof file);
+    console.log("json file", JSON.stringify(file));
+
+    // //fileReader
+    // var fileReader = new FileReader();
+    // fileReader.onload = function (event) {
+    //   var data = event.target.result;
+
+    //   var workbook = XLSX.read(data, {
+    //     type: "binary",
+    //   });
+    //   workbook.SheetNames.forEach((sheet) => {
+    //     let rowObject = XLSX.utils.sheet_to_row_object_array(
+    //       workbook.Sheets[sheet]
+    //     );
+    //     let jsonObject = JSON.stringify(rowObject);
+    //     document.getElementById("jsonData").innerHTML = jsonObject;
+    //     console.log("read file obj", jsonObject);
+    //   });
+    // };
+    // fileReader.readAsBinaryString(file);
+    
   }
 }
 
@@ -26,7 +56,8 @@ function runFunc() {
     // console.log("before gp def");
     var gp = new Geoprocessor(
       //TODO - replace this with the EDD GP service
-      "https://mygis.engeo.com/server/rest/services/CAF_23777/siteacessemailto/GPServer/siteacessemailto/"
+      // "https://mygis.engeo.com/server/rest/services/CAF_23777/siteacessemailto/GPServer/siteacessemailto/"
+      "https://mygis.engeo.com/server/rest/services/APIs/eddconvertor2/GPServer/EDD%20Converter"
     );
 
     //TODO - parse the input parameters frm the file upload
@@ -71,7 +102,9 @@ function runFunc() {
             progressDiv.remove();
           }
           //show the emails
-          jobInfo.fetchResultData("Send_Email").then(function (result) {
+          jobInfo.fetchResultData(
+            // "Send_Email"
+            ).then(function (result) {
             console.log("job result:", result.value);
             // htmlStr =
             //   "Task is complete! Please send emails below." + result.value;

@@ -13,10 +13,16 @@
   <link href="heroes.css" rel="stylesheet">
   <link rel="stylesheet"
       href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
+  <script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.3/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
+  <script src="https://js.arcgis.com/4.23/"></script>
+  
 
+  
 
   <script src="index.js"></script>
-  <script src="https://js.arcgis.com/4.23/"></script>
   
 
 </head>
@@ -26,12 +32,51 @@
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
         <label class="form-label" for="customFile">Upload input excel file</label>
         <input type="file" class="form-control" id="customFile" onchange="uploadFile()"/>
-        <button id="runButtonID" onclick="runFunc()"type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Run</button>
+        <button id="convertID" type="button">Convert</button>
+
+        <button id="runButtonID" onclick="runFunc()"
+        
+        type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Run</button>
         <div id="fileInfo"></div>
         
       </div>
+      <pre id="jsonData"></pre>
     </div>
   </div>
 </body>
+<script>
+  var selectedFile;
+    document
+      .getElementById("customFile")
+      .addEventListener("change", function(event) {
+        selectedFile = event.target.files[0];
+      });
+    document
+      .getElementById("convertID")
+      .addEventListener("click", function() {
+        if (selectedFile) {
+          console.log("hi");
+          var fileReader = new FileReader();
+          fileReader.onload = function(event) {
+            var data = event.target.result;
+
+            var workbook = XLSX.read(data, {
+              type: "binary"
+            });
+            workbook.SheetNames.forEach(sheet => {
+              let rowObject = XLSX.utils.sheet_to_row_object_array(
+                workbook.Sheets[sheet]
+              );
+              let jsonObject = JSON.stringify(rowObject);
+              document.getElementById("jsonData").innerHTML = jsonObject;
+              console.log(jsonObject);
+            });
+          };
+          fileReader.readAsBinaryString(selectedFile);
+          // console.log{()}
+        }
+      });
+
+</script>
 
 </html>
