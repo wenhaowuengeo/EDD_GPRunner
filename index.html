@@ -32,7 +32,7 @@
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
         <label class="form-label" for="customFile">Upload input excel file</label>
         <input type="file" class="form-control" id="customFile" onchange="uploadFile()"/>
-        <button id="convertID" type="button">Convert</button>
+        <button id="convertID" type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Convert</button>
 
         <button id="runButtonID" onclick="runFunc()"
         
@@ -46,6 +46,7 @@
 </body>
 <script>
   var selectedFile;
+  var inputfileString;
     document
       .getElementById("customFile")
       .addEventListener("change", function(event) {
@@ -68,6 +69,7 @@
                 workbook.Sheets[sheet]
               );
               let jsonObject = JSON.stringify(rowObject);
+              inputfileString = jsonObject;
               document.getElementById("jsonData").innerHTML = jsonObject;
               console.log(jsonObject);
             });

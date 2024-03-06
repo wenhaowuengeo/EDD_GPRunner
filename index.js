@@ -19,31 +19,11 @@ function uploadFile() {
     console.log("type of file", typeof file);
     console.log("json file", JSON.stringify(file));
 
-    // //fileReader
-    // var fileReader = new FileReader();
-    // fileReader.onload = function (event) {
-    //   var data = event.target.result;
-
-    //   var workbook = XLSX.read(data, {
-    //     type: "binary",
-    //   });
-    //   workbook.SheetNames.forEach((sheet) => {
-    //     let rowObject = XLSX.utils.sheet_to_row_object_array(
-    //       workbook.Sheets[sheet]
-    //     );
-    //     let jsonObject = JSON.stringify(rowObject);
-    //     document.getElementById("jsonData").innerHTML = jsonObject;
-    //     console.log("read file obj", jsonObject);
-    //   });
-    // };
-    // fileReader.readAsBinaryString(file);
-    
+    //TODO - integrate the converting logic here
   }
 }
 
-var htmlStr = "";
-
-//onclick event
+//Run button's onclick event
 function runFunc() {
   //import Geoprocessor from "@arcgis/core/rest/geoprocessor";
   console.log("run button is clicked");
@@ -62,66 +42,71 @@ function runFunc() {
 
     //TODO - parse the input parameters frm the file upload
     //define the input parameters
-    // var params = {
-    //   "Input_Feature": "",
-    // };
+    if (inputfileString) {
+      console.log("input file str is not null: ", inputfileString);
+      var params = {
+        EDD_Table: inputfileString,
+        Type_of_EDD: "Groundwater",
+      };
 
-    //submit the gp service
-    // console.log("before gp submission");
+      //submit the gp service
+      // console.log("before gp submission");
 
-    gp.submitJob()
-      .then(function (jobInfo) {
-        // gp.execute().then(function(jobInfo){ //CANNOT use execute() since the GP service job itself is defined as submitJob() operation
-        // const jobid = jobInfo.jobId;
-        // console.log("job id: ", jobid);
+      gp.submitJob([params])
+        .then(function (jobInfo) {
+          // gp.execute().then(function(jobInfo){ //CANNOT use execute() since the GP service job itself is defined as submitJob() operation
+          // const jobid = jobInfo.jobId;
+          // console.log("job id: ", jobid);
 
-        var progressDiv = document.createElement("div");
-        progressDiv.setAttribute("id", "progressText");
-        progressDiv.innerText = "Task is running ... ";
-        progressDiv.style.margin = "5px 15px 5px";
-        progressDiv.style.fontSize = "1.0em";
-        progressDiv.style.textAlign = "center";
-        document.getElementsByTagName("div")[0].appendChild(progressDiv);
+          var progressDiv = document.createElement("div");
+          progressDiv.setAttribute("id", "progressText");
+          progressDiv.innerText = "Task is running ... ";
+          progressDiv.style.margin = "5px 15px 5px";
+          progressDiv.style.fontSize = "1.0em";
+          progressDiv.style.textAlign = "center";
+          document.getElementsByTagName("div")[0].appendChild(progressDiv);
 
-        var runButton = document.getElementById("runButtonID");
-        runButton.style.background = "grey";
-        runButton.style.border = "grey";
-        // runButton.insertAdjacentElement("afterend", progressDiv);
+          var runButton = document.getElementById("runButtonID");
+          runButton.style.background = "grey";
+          runButton.style.border = "grey";
+          // runButton.insertAdjacentElement("afterend", progressDiv);
 
-        const options = {
-          interval: 50, //wait for 0.05 sec
-          statusCallback: (j) => {
-            console.log("Job Status: ", j.jobStatus);
-          },
-        };
+          const options = {
+            interval: 50, //wait for 0.05 sec
+            statusCallback: (j) => {
+              console.log("Job Status: ", j.jobStatus);
+            },
+          };
 
-        //TODO - download output file
-        jobInfo.waitForJobCompletion(options).then(() => {
-          if (progressDiv) {
-            // runButton.remove();
-            progressDiv.remove();
-          }
-          //show the emails
-          jobInfo.fetchResultData(
-            // "Send_Email"
-            ).then(function (result) {
-            console.log("job result:", result.value);
-            // htmlStr =
-            //   "Task is complete! Please send emails below." + result.value;
+          //TODO - download output file
+          jobInfo.waitForJobCompletion(options).then(() => {
+            if (progressDiv) {
+              // runButton.remove();
+              progressDiv.remove();
+            }
+            //show the emails
+            jobInfo
+              .fetchResultData
+              // "Send_Email"
+              ()
+              .then(function (result) {
+                console.log("job result:", result.value);
 
-            runButton.innerText = "Download";
-            runButton.style.background = "#0054A4";
-            runButton.style.border = "#0054A4";
-            //click the button to download the output file
-            runButton.onclick = function () {
-              console.log("download clicked");
-            };
+                runButton.innerText = "Download";
+                runButton.style.background = "#0054A4";
+                runButton.style.border = "#0054A4";
+                //click the button to download the output file
+                runButton.onclick = function () {
+                  console.log("download clicked");
+                };
+              });
           });
+        })
+        .catch(function (e) {
+          console.log("GP job failed", e);
         });
-      })
-      .catch(function (e) {
-        console.log("GP job failed", e);
-      });
-    console.log("GP service job submitted");
+
+      console.log("GP service job submitted");
+    }
   });
 }
