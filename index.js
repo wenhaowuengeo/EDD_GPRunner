@@ -79,16 +79,19 @@ function runFunc() {
           };
 
           //TODO - download output file
+          //TODO - convert json string to excel - https://stackoverflow.com/questions/28892885/javascript-json-to-excel-file-download
           jobInfo.waitForJobCompletion(options).then(() => {
+            console.log("job completed");
             if (progressDiv) {
               // runButton.remove();
               progressDiv.remove();
             }
-            //show the emails
+            // //show the emails
             jobInfo
-              .fetchResultData
-              // "Send_Email"
-              ()
+              .fetchResultData(
+                // "Send_Email"
+                "output1" //this is output variable name
+              )
               .then(function (result) {
                 console.log("job result:", result.value);
 
