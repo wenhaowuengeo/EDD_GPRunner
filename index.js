@@ -45,11 +45,12 @@ function runFunc() {
     if (inputfileString) {
       console.log("input file str is not null: ", inputfileString);
       var params = {
-        EDD_Table: "2",
-        // inputfileString,
+        EDD_Table: inputfileString,
         //TODO - create a dropdown for three options
         Type_of_EDD: "Soil",
       };
+
+      console.log("input params: ", params);
 
       //submit the gp service
       // console.log("before gp submission");
