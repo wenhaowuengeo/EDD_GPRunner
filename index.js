@@ -36,7 +36,7 @@ function runFunc() {
     // console.log("before gp def");
     var gp = new Geoprocessor(
       //TODO - replace this with the EDD GP service
-      // "https://mygis.engeo.com/server/rest/services/CAF_23777/siteacessemailto/GPServer/siteacessemailto/"
+      // "https://mygis.engeo.com/server/rest/services/CAF_23777/siteacessemailto/GPServer/siteacessemailto/" //for the "site access mail to" GP task
       "https://mygis.engeo.com/server/rest/services/APIs/eddconvertor2/GPServer/EDD%20Converter"
     );
 
@@ -78,18 +78,14 @@ function runFunc() {
             },
           };
 
-          //TODO - download output file
-          //TODO - convert json string to excel - https://stackoverflow.com/questions/28892885/javascript-json-to-excel-file-download
           jobInfo.waitForJobCompletion(options).then(() => {
             console.log("job completed");
             if (progressDiv) {
-              // runButton.remove();
               progressDiv.remove();
             }
             // //show the emails
             jobInfo
               .fetchResultData(
-                // "Send_Email"
                 "output1" //this is output variable name
               )
               .then(function (result) {
@@ -98,9 +94,15 @@ function runFunc() {
                 runButton.innerText = "Download";
                 runButton.style.background = "#0054A4";
                 runButton.style.border = "#0054A4";
-                //click the button to download the output file
+                //click the button to generate and download the output excel file
+                //TODO - Convert json string to excel - https://stackoverflow.com/questions/28892885/javascript-json-to-excel-file-download
                 runButton.onclick = function () {
                   console.log("download clicked");
+                  window.open(
+                    result.value,
+                    "_blank",
+                    "location=yes,height=570,width=520,scrollbars=yes,status=yes"
+                  );
                 };
               });
           });
