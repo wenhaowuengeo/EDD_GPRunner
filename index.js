@@ -46,7 +46,8 @@ function runFunc() {
       console.log("input file str is not null: ", inputfileString);
       var params = {
         EDD_Table: inputfileString,
-        Type_of_EDD: "Groundwater",
+        //TODO -
+        Type_of_EDD: "Soil",
       };
 
       //submit the gp service
@@ -70,6 +71,8 @@ function runFunc() {
           runButton.style.background = "grey";
           runButton.style.border = "grey";
           // runButton.insertAdjacentElement("afterend", progressDiv);
+
+          console.log("job info: ", jobInfo);
 
           const options = {
             interval: 50, //wait for 0.05 sec
