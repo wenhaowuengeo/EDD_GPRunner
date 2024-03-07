@@ -45,8 +45,9 @@ function runFunc() {
     if (inputfileString) {
       console.log("input file str is not null: ", inputfileString);
       var params = {
-        EDD_Table: inputfileString,
-        //TODO -
+        EDD_Table: "2",
+        // inputfileString,
+        //TODO - create a dropdown for three options
         Type_of_EDD: "Soil",
       };
 
