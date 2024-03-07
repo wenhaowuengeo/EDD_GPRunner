@@ -55,8 +55,14 @@ function runFunc() {
       //submit the gp service
       // console.log("before gp submission");
 
+      //this is not reporting error
+      // gp.submitJob([params]).catch((error) => console.error(error.message));
+
+      // console.log("after catcherror: ");
+
       gp.submitJob([params])
         .then(function (jobInfo) {
+          console.log("after submit job - job info: ", jobInfo);
           // gp.execute().then(function(jobInfo){ //CANNOT use execute() since the GP service job itself is defined as submitJob() operation
           // const jobid = jobInfo.jobId;
           // console.log("job id: ", jobid);
@@ -74,7 +80,7 @@ function runFunc() {
           runButton.style.border = "grey";
           // runButton.insertAdjacentElement("afterend", progressDiv);
 
-          console.log("job info: ", jobInfo);
+          console.log("mid submit - job info: ", jobInfo);
 
           const options = {
             interval: 50, //wait for 0.05 sec
@@ -83,34 +89,45 @@ function runFunc() {
             },
           };
 
-          jobInfo.waitForJobCompletion(options).then(() => {
-            console.log("job completed");
-            if (progressDiv) {
-              progressDiv.remove();
-            }
-            // //show the emails
-            jobInfo
-              .fetchResultData(
-                "output1" //this is output variable name
-              )
-              .then(function (result) {
-                console.log("job result:", result.value);
+          console.log("after options and before waitforjob complete");
 
-                runButton.innerText = "Download";
-                runButton.style.background = "#0054A4";
-                runButton.style.border = "#0054A4";
-                //click the button to generate and download the output excel file
-                //TODO - Convert json string to excel - https://stackoverflow.com/questions/28892885/javascript-json-to-excel-file-download
-                runButton.onclick = function () {
-                  console.log("download clicked");
-                  window.open(
-                    result.value,
-                    "_blank",
-                    "location=yes,height=570,width=520,scrollbars=yes,status=yes"
-                  );
-                };
-              });
-          });
+          jobInfo
+            .waitForJobCompletion(options)
+            .then(() => {
+              console.log("job completed");
+              if (progressDiv) {
+                progressDiv.remove();
+              }
+              // //show the emails
+              jobInfo
+                .fetchResultData(
+                  "output2" //this is output variable name
+                )
+                .then(function (result) {
+                  console.log("job result:", result.value);
+
+                  runButton.innerText = "Download";
+                  runButton.style.background = "#0054A4";
+                  runButton.style.border = "#0054A4";
+                  //click the button to generate and download the output excel file
+                  //TODO - Convert json string to excel - https://stackoverflow.com/questions/28892885/javascript-json-to-excel-file-download
+                  runButton.onclick = function () {
+                    console.log("download clicked");
+                    window.open(
+                      result.value,
+                      "_blank",
+                      "location=yes,height=570,width=520,scrollbars=yes,status=yes"
+                    );
+                  };
+                });
+            })
+            .catch((error) => {
+              console.log("error during execution: ", error);
+              console.log(
+                "error during execution stringify: ",
+                JSON.stringify(error)
+              );
+            });
         })
         .catch(function (e) {
           console.log("GP job failed", e);
