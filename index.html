@@ -13,11 +13,17 @@
   <link href="heroes.css" rel="stylesheet">
   <link rel="stylesheet"
       href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
-  <script
-  type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.3/xlsx.full.min.js"></script>
-  <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
-  <script src="https://js.arcgis.com/4.23/"></script>
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  
+      <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script> -->
+  <!-- <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script> -->
+  <script src="https://js.arcgis.com/4.20/"></script>
+
+  <!-- versions older than 4.20 CANNOT work with JobInfo. and 4.24 - 4.29 cannot work with geoprocessor... -->
+  <!-- <script src="https://js.arcgis.com/4.23/"></script> -->
+  <!-- <script src="https://js.arcgis.com/3.46/"></script> -->
+  <!-- this legacy version does not support jobinfo -->
+  <!-- <script src="https://js.arcgis.com/3.46compact/"></script> -->
   
 
   
@@ -46,39 +52,41 @@
 </body>
 <script>
   var selectedFile;
-  var inputfileString;
+  var inputfileString = 'placeholder'; //make this not null for debugging
     document
       .getElementById("customFile")
       .addEventListener("change", function(event) {
         selectedFile = event.target.files[0];
       });
     document
-      .getElementById("convertID")
-      .addEventListener("click", function() {
-        if (selectedFile) {
-          console.log("hi");
-          var fileReader = new FileReader();
-          fileReader.onload = function(event) {
-            var data = event.target.result;
+    .getElementById("convertID")
+    .addEventListener("click", function() {
+      if (selectedFile) {
+        console.log("hi");
+        var fileReader = new FileReader();
+        fileReader.onload = function(event) {
+          var data = event.target.result;
 
-            var workbook = XLSX.read(data, {
-              type: "binary"
-            });
-            workbook.SheetNames.forEach(sheet => {
-              let rowObject = XLSX.utils.sheet_to_row_object_array(
-                workbook.Sheets[sheet]
-              );
-              let jsonObject = JSON.stringify(rowObject);
-              inputfileString = jsonObject;
-              document.getElementById("jsonData").innerHTML = jsonObject;
-              console.log(jsonObject);
-            });
-          };
-          fileReader.readAsBinaryString(selectedFile);
-          // console.log{()}
-        }
-      });
+          var workbook = XLSX.read(data, {
+            type: "binary"
+          });
+          workbook.SheetNames.forEach(sheet => {
+            let rowObject = XLSX.utils.sheet_to_row_object_array(
+              workbook.Sheets[sheet]
+            );
+            let jsonObject = JSON.stringify(rowObject);
+            inputfileString = jsonObject;
+            document.getElementById("jsonData").innerHTML = jsonObject;
+            console.log(jsonObject);
+          });
+        };
+        fileReader.readAsBinaryString(selectedFile);
+        // console.log{()}
+      }
+    });
+    
 
 </script>
 
 </html>
+
