@@ -15,8 +15,6 @@
       href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
   <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
   
-      <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script> -->
-  <!-- <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script> -->
   <script src="https://js.arcgis.com/4.20/"></script>
 
   <!-- versions older than 4.20 CANNOT work with JobInfo. and 4.24 - 4.29 cannot work with geoprocessor... -->
@@ -24,8 +22,6 @@
   <!-- <script src="https://js.arcgis.com/3.46/"></script> -->
   <!-- this legacy version does not support jobinfo -->
   <!-- <script src="https://js.arcgis.com/3.46compact/"></script> -->
-  
-
   
 
   <script src="index.js"></script>
@@ -36,9 +32,21 @@
   <div class="px-4 py-5 my-5 text-center">
     <div></div>
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        <label class="form-label" for="customFile">Upload input excel file</label>
-        <input type="file" class="form-control" id="customFile" onchange="uploadFile()"/>
-        <button id="convertID" type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Convert</button>
+        <div>
+          <label class="form-label" for="customFile">Upload input excel file</label>
+          <input type="file" class="form-control" id="customFile" onchange="uploadFile()"/>
+        </div>
+        <div>
+          <label class="form-label" for="EDDType">Choose EDD Type</label>
+          <select class="form-select" id="EDDType" aria-label="Choose EDD type">
+            <!-- <option selected>Choose EDD type</option> -->
+            <option selected value="Soil">Soil</option>
+            <option value="Groundwater">Groundwater</option>
+            <option value="Soil Gas and IA">Soil Gas and IA</option>
+        </select>
+        </div>
+
+        <button id="convertID" type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Check</button>
 
         <button id="runButtonID" onclick="runFunc()"
         
@@ -46,12 +54,16 @@
         <div id="fileInfo"></div>
         
       </div>
+      <div id="checkDivText"></div>
+      
       <pre id="jsonData"></pre>
+      
     </div>
   </div>
 </body>
 <script>
   var selectedFile;
+  var EDDType;
   var inputfileString = 'placeholder'; //make this not null for debugging
     document
       .getElementById("customFile")
@@ -79,9 +91,15 @@
             document.getElementById("jsonData").innerHTML = jsonObject;
             console.log(jsonObject);
           });
+
+          EDDType = document.getElementById('EDDType').value;
+          console.log("selected EDD type: ", EDDType);
         };
         fileReader.readAsBinaryString(selectedFile);
-        // console.log{()}
+        
+        if (inputfileString && EDDType){
+          document.getElementById("checkDivText").innerHTML = "<p>input format is okay!</p>";
+        }
       }
     });
     
