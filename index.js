@@ -78,148 +78,163 @@ function runFunc() {
 
       // console.log("after catcherror: ");
       //Use standard doc's implementation: https://developers.arcgis.com/arcgis-rest-js/api-reference/arcgis-rest-request/Job/
-      gp.submitJob([params])
-        .then((job) => {
-          return job.getAllResults();
-        })
-        .then((allResults) => {
-          console.log(allResults);
-        })
-        .catch((e) => {
-          if (e.name === "ArcGISJobError") {
-            console.log(
-              "Something went wrong while running the job",
-              e.jobInfo
-            );
-          }
-        });
-
-      //TODO - ORIGINAL CODE
       // gp.submitJob([params])
-      //   .then(function (jobInfo) {
-      //     console.log("after submit job - job info: ", jobInfo);
-
-      //     var progressDiv = document.createElement("div");
-      //     progressDiv.setAttribute("id", "progressText");
-      //     progressDiv.innerText = "Task is running ... ";
-      //     progressDiv.style.margin = "5px 15px 5px";
-      //     progressDiv.style.fontSize = "1.0em";
-      //     progressDiv.style.textAlign = "center";
-      //     document.getElementsByTagName("div")[0].appendChild(progressDiv);
-
-      //     var runButton = document.getElementById("runButtonID");
-      //     runButton.style.background = "grey";
-      //     runButton.style.border = "grey";
-      //     // runButton.insertAdjacentElement("afterend", progressDiv);
-
-      //     console.log("mid submit - job info: ", jobInfo);
-
-      //     const options = {
-      //       interval: 50, //wait for 0.05 sec
-      //       statusCallback: (j) => {
-      //         console.log("Job Status: ", j.jobStatus);
-      //       },
-      //     };
-
-      //     console.log("after options and before waitforjob complete");
-
-      //     //wait for the job to complete - produces generic error
-      //     // jobInfo
-      //     //   .waitForJobCompletion(options)
-      //     //   .then(() => {
-      //     //     console.log("job completed");
-      //     //     if (progressDiv) {
-      //     //       progressDiv.remove();
-      //     //     }
-      //     //     // //show the emails
-      //     //     jobInfo
-      //     //       .fetchResultData(
-      //     //         "output2" //this is output variable name
-      //     //       )
-      //     //       .then(function (result) {
-      //     //         console.log("job result:", result.value);
-
-      //     //         runButton.innerText = "Download";
-      //     //         runButton.style.background = "#0054A4";
-      //     //         runButton.style.border = "#0054A4";
-      //     //         //click the button to generate and download the output excel file
-      //     //         //TODO - Convert json string to excel - https://stackoverflow.com/questions/28892885/javascript-json-to-excel-file-download
-      //     //         runButton.onclick = function () {
-      //     //           console.log("download clicked");
-      //     //           window.open(
-      //     //             result.value,
-      //     //             "_blank",
-      //     //             "location=yes,height=570,width=520,scrollbars=yes,status=yes"
-      //     //           );
-      //     //         };
-      //     //       });
-      //     //   })
-      //     //   .catch((error) => {
-      //     //     console.log("error during execution: ", error);
-      //     //     console.log(
-      //     //       "error during execution stringify: ",
-      //     //       JSON.stringify(error)
-      //     //     );
-      //     //   });
-
-      //     //Debug - check while executing
-      //     // if (jobInfo.jobStatus !== JobInfo.STATUS_SUCCEEDED) {
-      //     //   console.log(
-      //     //     "Job did not complete successfully. Inspecting messages..."
-      //     //   );
-      //     //   var thisJobId = jobInfo.jobId;
-      //     //   console.log("this jobid: ", thisJobId);
-
-      //     // //use getJobInfo() - not a function!
-      //     // gp.getJobInfo(thisJobId).then(function (jobInfo) {
-      //     //   if (jobInfo.jobStatus === "esriJobFailed") {
-      //     //     console.log("Job failed:", jobInfo.messages);
-      //     //   }
-      //     // });
-
-      //     // //use checkJobStatus() - undefined method!
-      //     // gp.checkJobStatus(thisJobId).then(function (status) {
-      //     //   if (
-      //     //     status.jobStatus === "esriJobFailed" ||
-      //     //     status.jobStatus === "esriJobCancelled"
-      //     //   ) {
-      //     //     console.log("Job failed or was cancelled");
-      //     //     fetchJobMessages(gp, thisJobId); // Fetch error messages
-      //     //   } else if (status.jobStatus === "esriJobSucceeded") {
-      //     //     console.log("Job succeeded");
-      //     //     // Proceed to fetch results
-      //     //   } else {
-      //     //     // If job is still running, check again after some delay
-      //     //     setTimeout(() => checkJobStatus(gp, thisJobId), 2000);
-      //     //   }
-      //     // });
-
-      //     //result can be incomplete yet
-      //     // gp.getResultData(jobInfo.jobId, "messages", function (messages) {
-      //     //   messages.value.forEach(function (message) {
-      //     //     // Check for error messages
-      //     //     if (message.type === GPMessage.TYPE_ERROR) {
-      //     //       console.log("GP Error Message: ", message.description);
-      //     //     } else {
-      //     //       console.log("GP message", message);
-      //     //     }
-      //     //   });
-      //     // }).catch((error) => {
-      //     //   console.log("error during execution: ", error);
-      //     //   console.log(
-      //     //     "error during execution stringify: ",
-      //     //     JSON.stringify(error)
-      //     //   );
-      //     // });
-      //     // } else {
-      //     //   console.log("success");
-      //     // }
-
-      //     //catch error
+      //   .then((job) => {
+      //     return job.getAllResults();
       //   })
-      //   .catch(function (e) {
-      //     console.log("GP job failed", e);
+      //   .then((allResults) => {
+      //     console.log(allResults);
+      //   })
+      //   .catch((e) => {
+      //     if (e.name === "ArcGISJobError") {
+      //       console.log(
+      //         "Something went wrong while running the job",
+      //         e.jobInfo
+      //       );
+      //     }
       //   });
+
+      // gp.submitJob(params)
+      //   .then((job) => {
+      //     return job.waitForCompletion();
+      //   })
+      //   .then((jobInfo) => {
+      //     console.log("job finished", e.jobInfo);
+      //   })
+      //   .catch((e) => {
+      //     if (e.name === "ArcGISJobError") {
+      //       console.log(
+      //         "Something went wrong while running the job",
+      //         e.jobInfo
+      //       );
+      //     }
+      //   });
+
+      //TODO - ORIGINAL
+      //IMPORTANT - [params] is INCORRECT! problematic!!! https://enterprise.arcgis.com/en/server/10.8/publish-services/windows/using-geoprocessing-tasks-in-web-applications.htm
+      gp.submitJob(params)
+        .then(function (jobInfo) {
+          console.log("after submit job - job info: ", jobInfo);
+
+          var progressDiv = document.createElement("div");
+          progressDiv.setAttribute("id", "progressText");
+          progressDiv.innerText = "Task is running ... ";
+          progressDiv.style.margin = "5px 15px 5px";
+          progressDiv.style.fontSize = "1.0em";
+          progressDiv.style.textAlign = "center";
+          document.getElementsByTagName("div")[0].appendChild(progressDiv);
+
+          var runButton = document.getElementById("runButtonID");
+          runButton.style.background = "grey";
+          runButton.style.border = "grey";
+          // runButton.insertAdjacentElement("afterend", progressDiv);
+
+          // console.log("mid submit - job info: ", jobInfo);
+
+          const options = {
+            interval: 50, //wait for 0.05 sec
+            statusCallback: (j) => {
+              console.log("Job Status: ", j.jobStatus); //actually this keeps running!
+            },
+          };
+
+          // console.log("after options and before waitforjob complete");
+
+          // TODO - Debug - check while executing
+          // if (jobInfo.jobStatus !== JobInfo.STATUS_SUCCEEDED) {
+          //   console.log(
+          //     "Job did not complete successfully. Inspecting messages..."
+          //   );
+
+          // //use getJobInfo() - not a function!
+          // var thisJobId = jobInfo.jobId;
+          // console.log("this jobid: ", thisJobId);
+          // gp.getJobInfo(thisJobId).then(function (jobInfo) {
+          //   if (jobInfo.jobStatus === "esriJobFailed") {
+          //     console.log("Job failed:", jobInfo.messages);
+          //   }
+          // });
+
+          // //use checkJobStatus() - undefined method!
+          // gp.checkJobStatus(thisJobId).then(function (status) {
+          //   if (
+          //     status.jobStatus === "esriJobFailed" ||
+          //     status.jobStatus === "esriJobCancelled"
+          //   ) {
+          //     console.log("Job failed or was cancelled");
+          //     fetchJobMessages(gp, thisJobId); // Fetch error messages
+          //   } else if (status.jobStatus === "esriJobSucceeded") {
+          //     console.log("Job succeeded");
+          //     // Proceed to fetch results
+          //   } else {
+          //     // If job is still running, check again after some delay
+          //     setTimeout(() => checkJobStatus(gp, thisJobId), 2000);
+          //   }
+          // });
+
+          // This was never run - result can be incomplete yet
+          // gp.getResultData(jobInfo.jobId, "messages", function (messages) {
+          //   messages.value.forEach(function (message) {
+          //     // Check for error messages
+          //     if (message.type === GPMessage.TYPE_ERROR) {
+          //       console.log("GP Error Message: ", message.description);
+          //     } else {
+          //       console.log("GP message", message);
+          //     }
+          //   });
+          // }).catch((error) => {
+          //   console.log("error during execution: ", error);
+          //   console.log(
+          //     "error during execution stringify: ",
+          //     JSON.stringify(error)
+          //   );
+          // });
+          // }
+
+          // wait for the job to complete - produces generic error
+          jobInfo
+            .waitForJobCompletion(options)
+            .then(() => {
+              console.log("job completed");
+              if (progressDiv) {
+                progressDiv.remove();
+              }
+              // //show the emails
+              jobInfo
+                .fetchResultData(
+                  "output2" //this is output variable name
+                )
+                .then(function (result) {
+                  console.log("job result:", result.value);
+
+                  runButton.innerText = "Download";
+                  runButton.style.background = "#0054A4";
+                  runButton.style.border = "#0054A4";
+                  //click the button to generate and download the output excel file
+                  //TODO - Convert json string to excel - https://stackoverflow.com/questions/28892885/javascript-json-to-excel-file-download
+                  runButton.onclick = function () {
+                    console.log("download clicked");
+                    window.open(
+                      result.value,
+                      "_blank",
+                      "location=yes,height=570,width=520,scrollbars=yes,status=yes"
+                    );
+                  };
+                });
+            })
+            .catch((error) => {
+              console.log("error during execution: ", error);
+              console.log(
+                "error during execution stringify: ",
+                JSON.stringify(error)
+              );
+            });
+
+          // catch error
+        })
+        .catch(function (e) {
+          console.log("GP job failed", e);
+        });
 
       console.log("GP service job submitted");
     }
