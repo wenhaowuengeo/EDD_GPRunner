@@ -1,35 +1,29 @@
 //upload input file
 function uploadFile() {
   console.log("file uploaded!");
-  var file = document.getElementById("customFile").files[0];
-  if (file) {
-    console.log("file is uploaded");
-    //if a file is uploaded
-    var fileInfoDiv = document.getElementById("fileInfo");
-    fileInfoDiv.innerHTML =
-      "<p>You've uploaded this file: " + file.name + "</p>";
-    // fileInfoDiv.innerText = "file name: ${file.name}";
+  // var file = document.getElementById("customFile").files[0];
+  // if (file) {
+  //   console.log("file is uploaded");
+  //   //if a file is uploaded
+  //   var fileInfoDiv = document.getElementById("fileInfo");
+  //   fileInfoDiv.innerHTML =
+  //     "<p>You've uploaded this file: " + file.name + "</p>";
 
-    //Not working:
-    // readXlsxFile(file).then(function(rows){
-    //   console.log(rows);
-    // })
+  //   console.log("file", file);
+  //   console.log("type of file", typeof file);
+  //   console.log("json file", JSON.stringify(file));
 
-    console.log("file", file);
-    console.log("type of file", typeof file);
-    console.log("json file", JSON.stringify(file));
-
-    //TODO - integrate the converting logic here
-  }
+  //   //TODO - integrate the converting logic here
+  // }
 }
 
 //Run button's onclick event
 function runFunc() {
   console.log("run button is clicked");
 
-  var checkDiv = document.getElementById("checkDivText");
-  if (checkDiv) {
-    checkDiv.remove();
+  var fileInfo3 = document.getElementById("fileInfo");
+  if (fileInfo3) {
+    fileInfo3.innerHTML = "<div></div>";
   }
 
   //trigger GP service
@@ -39,16 +33,9 @@ function runFunc() {
   ) => {
     // console.log("before gp def");
     var gp = new Geoprocessor(
-      //TODO - replace this with the EDD GP service
       // "https://mygis.engeo.com/server/rest/services/CAF_23777/siteacessemailto/GPServer/siteacessemailto/" //for the "site access mail to" GP task
       "https://mygis.engeo.com/server/rest/services/APIs/eddconvertor2/GPServer/EDD%20Converter"
     );
-
-    //TODO - parse the input parameters from the file upload
-
-    ////TODO - Debugging! Why???
-    // TypeError: 'caller', 'callee', and 'arguments' properties may not be accessed on strict mode functions or the arguments objects for calls to them
-    // at Function.invokeGetter (<anonymous>:3:28)
 
     //define the input parameters
     if (inputfileString && EDDType) {

@@ -46,7 +46,7 @@
         </select>
         </div>
 
-        <button id="convertID" type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Check</button>
+        <button id="checkID" type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Check</button>
 
         <button id="runButtonID" onclick="runFunc()"
         
@@ -55,53 +55,74 @@
         
       </div>
       <div id="checkDivText"></div>
-      
+
       <pre id="jsonData"></pre>
       
     </div>
   </div>
 </body>
 <script>
+  
+  
+  var inputfileString = 'placeholder'; //make this not null for debugging
   var selectedFile;
   var EDDType;
-  var inputfileString = 'placeholder'; //make this not null for debugging
-    document
-      .getElementById("customFile")
-      .addEventListener("change", function(event) {
-        selectedFile = event.target.files[0];
-      });
-    document
-    .getElementById("convertID")
-    .addEventListener("click", function() {
+
+  //file upload
+  document
+    .getElementById("customFile")
+    .addEventListener("change", function(event) {
+      selectedFile = event.target.files[0];
       if (selectedFile) {
-        console.log("hi");
+        var fileInfoDiv = document.getElementById("fileInfo");
+        fileInfoDiv.innerHTML = "<p>You've uploaded this file: " + selectedFile.name + "</p>";
+
         var fileReader = new FileReader();
         fileReader.onload = function(event) {
-          var data = event.target.result;
+        var data = event.target.result;
 
-          var workbook = XLSX.read(data, {
-            type: "binary"
-          });
-          workbook.SheetNames.forEach(sheet => {
-            let rowObject = XLSX.utils.sheet_to_row_object_array(
-              workbook.Sheets[sheet]
-            );
-            let jsonObject = JSON.stringify(rowObject);
-            inputfileString = jsonObject;
-            document.getElementById("jsonData").innerHTML = jsonObject;
-            console.log(jsonObject);
-          });
-
-          EDDType = document.getElementById('EDDType').value;
-          console.log("selected EDD type: ", EDDType);
-        };
-        fileReader.readAsBinaryString(selectedFile);
+        var workbook = XLSX.read(data, {
+          type: "binary"
+        });
         
-        if (inputfileString && EDDType){
-          document.getElementById("checkDivText").innerHTML = "<p>input format is okay!</p>";
-        }
+        workbook.SheetNames.forEach(sheet => {
+          let rowObject = XLSX.utils.sheet_to_row_object_array(
+            workbook.Sheets[sheet]
+          );
+          let jsonObject = JSON.stringify(rowObject);
+          inputfileString = jsonObject;
+          document.getElementById("jsonData").innerHTML = jsonObject;
+          console.log(jsonObject);
+        });
+      };
+      fileReader.readAsBinaryString(selectedFile); 
       }
     });
+  
+  //choose EDD type
+  document
+    .getElementById("EDDType")
+    .addEventListener("change", function(event) {
+      EDDType = document.getElementById('EDDType').value;
+      console.log("selected EDD type: ", EDDType);
+  }) 
+  
+  //check the input
+  document
+  .getElementById("checkID")
+  .addEventListener("click", function() {
+    console.log("check button clicked");
+    var checkButton = document.getElementById("checkID");
+    checkButton.style.background = "grey";
+    checkButton.style.border = "grey";
+
+    if (selectedFile && EDDType){
+      var fileInfo2 = document.getElementById("fileInfo");
+      console.log("file info change");
+      fileInfo2.innerHTML = "<p>Input format is okay! Click run to execute the task</p>";
+    }
+
+  });
     
 
 </script>
