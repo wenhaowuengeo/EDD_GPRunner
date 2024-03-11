@@ -63,12 +63,12 @@
 </body>
 <script>
   
+  var selectedFile; //initial is null
+  var EDDType = 'Soil'; //default type
   
-  var inputfileString = 'placeholder'; //make this not null for debugging
-  var selectedFile;
-  var EDDType;
+  var inputfileString = 'placeholder'; //default parsed string
 
-  //file upload
+  //file upload button
   document
     .getElementById("customFile")
     .addEventListener("change", function(event) {
@@ -99,7 +99,7 @@
       }
     });
   
-  //choose EDD type
+  //choose EDD type button
   document
     .getElementById("EDDType")
     .addEventListener("change", function(event) {
@@ -107,7 +107,7 @@
       console.log("selected EDD type: ", EDDType);
   }) 
   
-  //check the input
+  //check the input button
   document
   .getElementById("checkID")
   .addEventListener("click", function() {
@@ -116,7 +116,9 @@
     checkButton.style.background = "grey";
     checkButton.style.border = "grey";
 
-    if (selectedFile && EDDType){
+    if (!selectedFile) {
+      alert("Please upload a input Excel file.");
+    } else if (selectedFile && EDDType){
       var fileInfo2 = document.getElementById("fileInfo");
       console.log("file info change");
       fileInfo2.innerHTML = "<p>Input format is okay! Click run to execute the task</p>";
