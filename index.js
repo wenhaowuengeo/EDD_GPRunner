@@ -1,20 +1,7 @@
 //upload input file
 function uploadFile() {
   console.log("file uploaded!");
-  // var file = document.getElementById("customFile").files[0];
-  // if (file) {
-  //   console.log("file is uploaded");
-  //   //if a file is uploaded
-  //   var fileInfoDiv = document.getElementById("fileInfo");
-  //   fileInfoDiv.innerHTML =
-  //     "<p>You've uploaded this file: " + file.name + "</p>";
-
-  //   console.log("file", file);
-  //   console.log("type of file", typeof file);
-  //   console.log("json file", JSON.stringify(file));
-
   //   //TODO - integrate the converting logic here
-  // }
 }
 
 //Run button's onclick event
@@ -38,14 +25,19 @@ function runFunc() {
     );
 
     //define the input parameters
+    // TODO - check for the input EDD type?
     if (inputfileString && EDDType) {
-      console.log("input file str is not null: ", inputfileString);
+      //wrap the params into one combined input as a nested JSON object
+      // var paramsCombined = {
+      //   input: {
+      //     Type_of_EDD: EDDType, //EDDType: the type the user selects on the webpage
+      //     EDD_Table: inputfileString, //inputfileString: the parsed string from the input excel file
+      //   },
+      // };
+
       var params = {
-        EDD_Table: inputfileString, //hardcode for debugging
-        //TODO - create a dropdown for three options
         Type_of_EDD: EDDType,
-        // "Soil Gas and IA"
-        // Type_of_EDD: "Soil",
+        EDD_Table: inputfileString,
       };
 
       console.log("input params: ", params);
@@ -53,6 +45,9 @@ function runFunc() {
       //TODO - ORIGINAL
       //IMPORTANT - [params] is INCORRECT! problematic!!! https://enterprise.arcgis.com/en/server/10.8/publish-services/windows/using-geoprocessing-tasks-in-web-applications.htm
       gp.submitJob(params)
+
+        // gp.submitJob(paramsCombined)
+
         .then(function (jobInfo) {
           console.log("after submit job - job info: ", jobInfo);
 

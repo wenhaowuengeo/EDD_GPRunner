@@ -120,7 +120,9 @@
       alert("Please upload a input Excel file.");
     } else if (selectedFile && EDDType){
       var fileInfo2 = document.getElementById("fileInfo");
-      console.log("file info change");
+      console.log("file info changed: ");
+      console.log("input file str: ", inputfileString);
+      console.log("EDD type:", EDDType);
       fileInfo2.innerHTML = "<p>Input format is okay! Click run to execute the task</p>";
     }
 
