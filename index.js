@@ -28,25 +28,25 @@ function runFunc() {
     // TODO - check for the input EDD type?
     if (inputfileString && EDDType) {
       //wrap the params into one combined input as a nested JSON object
-      // var paramsCombined = {
-      //   input: {
-      //     Type_of_EDD: EDDType, //EDDType: the type the user selects on the webpage
-      //     EDD_Table: inputfileString, //inputfileString: the parsed string from the input excel file
-      //   },
-      // };
-
-      var params = {
-        Type_of_EDD: EDDType,
-        EDD_Table: inputfileString,
+      var paramsCombined = {
+        input: {
+          Type_of_EDD: EDDType, //EDDType: the type the user selects on the webpage
+          EDD_Table: inputfileString, //inputfileString: the parsed string from the input excel file
+        },
       };
+
+      // var params = {
+      //   Type_of_EDD: EDDType,
+      //   EDD_Table: inputfileString,
+      // };
 
       console.log("input params: ", params);
 
       //TODO - ORIGINAL
       //IMPORTANT - [params] is INCORRECT! problematic!!! https://enterprise.arcgis.com/en/server/10.8/publish-services/windows/using-geoprocessing-tasks-in-web-applications.htm
-      gp.submitJob(params)
+      // gp.submitJob(params)
 
-        // gp.submitJob(paramsCombined)
+      gp.submitJob(paramsCombined)
 
         .then(function (jobInfo) {
           console.log("after submit job - job info: ", jobInfo);
