@@ -81,7 +81,9 @@ function runFunc() {
             .then(() => {
               console.log("job completed");
               if (progressDiv) {
-                progressDiv.remove();
+                progressDiv.innerText =
+                  "Task is complete. Refresh the page to run another task";
+                // progressDiv.remove();
               }
               // //show the emails
               jobInfo
