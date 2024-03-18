@@ -109,9 +109,9 @@ function runFunc() {
                 });
             })
             .catch((error) => {
-              console.log("error during execution: ", error);
+              console.log("error: ", error);
               console.log(
-                "error during execution stringify: ",
+                "error during execution - stringified error: ",
                 JSON.stringify(error)
               );
             });
