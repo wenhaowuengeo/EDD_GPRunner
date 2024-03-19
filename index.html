@@ -23,7 +23,6 @@
     <!-- this legacy version does not support jobinfo -->
     <!-- <script src="https://js.arcgis.com/3.46compact/"></script> -->
 
-
     <script src="index.js"></script>
 
 
@@ -31,26 +30,52 @@
 
 <body>
     <div class="px-4 py-5 my-5 text-center">
-        <div></div>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <div>
-                <label class="form-label" for="customFile">Upload input excel file</label>
-                <input type="file" class="form-control" id="customFile" onchange="uploadFile()" />
+            <div class="jumbotron text-center">
+                <div class="container">
+                    <h4 style="font-weight: bold; color:#0054A4 ">Electronic Data Deliverable (EDD) Converter</h4>
+                    <div class="row" style="margin:auto; width:50%;">
+                        <p class="lead text-muted"><small>Convert the EDD input excel files into standard formatted EDD tables.</small></p>
+                        <p><a class="btn btn-secondary btn-sm" style="background-color:grey" href="https://mygis.engeo.com/portal/sharing/rest/content/items/c479c616c10f4edc924c1f172f92c3f2/data?token=60Qni6QOnQBly9ihSCt2Yek58FSLXwXlMEGNhFHDEmKAcCFSPx7FjyoTKtzH2JKSpk6tMVSjdAHotkDHdWgq0fVZ9SkrzkkKlrl6-grJbXQ5l-7Sd9e9YMaLg9HRTzyuBhuXc7oVp56feNOSt7QU0yIvvKeEIxBYEkd7TsdG8DzLoqJRbBkFJ0zFaUGFaK8H9nFLtTZAcslYbqwmScpl9Wohstvqy9bRKrplsGw7NaI."
+                                target="_blank" role="button">Help doc &raquo;</a></p>
+                        <hr class="my-4 ">
+                    </div>
+                </div>
             </div>
-            <div>
-                <label class="form-label" for="EDDType">Choose EDD Type</label>
-                <select class="form-select" id="EDDType" aria-label="Choose EDD type">
-            <!-- <option selected>Choose EDD type</option> -->
-            <option selected value="Soil">Soil</option>
-            <option value="Groundwater">Groundwater</option>
-            <option value="Soil Gas and IA">Soil Gas and IA</option>
-        </select>
+        </div>
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+
+            <div class="row"></div>
+            <div class="row">
+
+                <div class="col-lg-auto">
+                    <label class="form-label" for="customFile">Upload input excel file</label>
+                    <input type="file" class="form-control" id="customFile" onchange="uploadFile()" />
+                </div>
+                <div class="col-sm-auto">
+                    <label class="form-label" for="EDDType">Choose EDD Type</label>
+                    <select class="form-select" id="EDDType" aria-label="Choose EDD type">
+                        <!-- <option selected>Choose EDD type</option> -->
+                        <option selected value="Soil">Soil</option>
+                        <option value="Groundwater">Groundwater</option>
+                        <option value="Soil Gas and IA">Soil Gas and IA</option>
+                    </select>
+                </div>
+                <div class="col-sm-auto">
+                    <label class="form-label" for="executionID">Execution</label>
+                    <div id="executionID">
+                        <!-- btn-lg px-4 gap-3 -->
+                        <button id="checkID" type="button" class="btn btn-primary " style="background-color:#0054A4">Check</button>
+                        <button id="runButtonID" onclick="runFunc()" type="button" class="btn btn-primary" style="background-color:#0054A4">Run</button>
+                    </div>
+
+                </div>
             </div>
 
-            <button id="checkID" type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Check</button>
-
-            <button id="runButtonID" onclick="runFunc()" type="button" class="btn btn-primary btn-lg px-4 gap-3" style="background-color:#0054A4">Run</button>
             <div id="fileInfo"></div>
+            <!-- </div> -->
+
 
         </div>
         <div id="checkDivText"></div>
