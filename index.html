@@ -29,7 +29,7 @@
 </head>
 
 <body>
-    <div class="px-4 py-5 my-5 text-center">
+    <div class="jumbotron vertical-center" style="margin-top:5%;">
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
             <div class="jumbotron text-center">
                 <div class="container">
@@ -39,16 +39,18 @@
                         <p><a class="btn btn-secondary btn-sm" style="background-color:grey" href="https://mygis.engeo.com/portal/sharing/rest/content/items/c479c616c10f4edc924c1f172f92c3f2/data?token=60Qni6QOnQBly9ihSCt2Yek58FSLXwXlMEGNhFHDEmKAcCFSPx7FjyoTKtzH2JKSpk6tMVSjdAHotkDHdWgq0fVZ9SkrzkkKlrl6-grJbXQ5l-7Sd9e9YMaLg9HRTzyuBhuXc7oVp56feNOSt7QU0yIvvKeEIxBYEkd7TsdG8DzLoqJRbBkFJ0zFaUGFaK8H9nFLtTZAcslYbqwmScpl9Wohstvqy9bRKrplsGw7NaI."
                                 target="_blank" role="button">Help doc &raquo;</a></p>
                         <hr class="my-4 ">
+
+                        <!-- TODO - refactor into batch running, accepts multiple input files and types, just hit run once -->
+                        <!-- <p><a id="addTaskID" class="btn btn-secondary btn-sm" style="background-color:#0054A499; border:none;" href="#" target="_blank" role="button"><strong>+</strong> Add a task </a></p> -->
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
 
-            <div class="row"></div>
-            <div class="row">
 
+        <div class="container text-center">
+            <div class="row justify-content-center" id="inputRowID">
                 <div class="col-lg-auto">
                     <label class="form-label" for="customFile">Upload input excel file</label>
                     <input type="file" class="form-control" id="customFile" onchange="uploadFile()" />
@@ -72,15 +74,14 @@
 
                 </div>
             </div>
-
-            <div id="fileInfo"></div>
-            <!-- </div> -->
-
+            <div class="row justify-content-center">
+                <!-- TODO - use dynamic ids for batch new job creation -->
+                <div class="col-md-auto" style="margin-top:3%; font-weight:bold; color:#0054A4;" id="fileInfo"></div>
+                <div class="col-md-auto" style="margin-top:3%; font-weight:bold; color:#0054A4;" id="checkDivText"></div>
+                <pre id="jsonData"></pre>
+            </div>
 
         </div>
-        <div id="checkDivText"></div>
-
-        <pre id="jsonData"></pre>
 
     </div>
     </div>
@@ -148,6 +149,16 @@
                 console.log("EDD type:", EDDType);
                 fileInfo2.innerHTML = "<p>Input format is okay! Click run to execute the task</p>";
             }
+
+        });
+
+    //add new task
+    document
+        .getElementById("addTaskID")
+        .addEventListener("click", function() {
+            alert("a new task is added!");
+            var newRow = document.getElementById('inputRowID').clone();
+
 
         });
 </script>
