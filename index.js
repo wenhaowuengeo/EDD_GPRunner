@@ -47,7 +47,6 @@ require(["esri/tasks/Geoprocessor", "esri/rest/support/JobInfo"], (
         //if task row exists
         var params = {
           Type_of_EDD: window["UploadedEDDType" + i],
-          // Type_of_EDD: window["EDDType" + i],
           EDD_Table: window["inputfileString" + i],
         };
 

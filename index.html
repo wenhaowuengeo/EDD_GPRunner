@@ -55,6 +55,7 @@
                         <p class="lead text-muted"><small>Convert the EDD input excel files into standard formatted EDD tables.</small></p>
                         <p><a class="btn btn-secondary btn-sm" style="background-color:grey" href="https://mygis.engeo.com/portal/sharing/rest/content/items/ce51a6cb86e54a6c87283b3513f9699c/data?token=kifsRRFphh9kmnFbe03VGdBa5u_m10AkyDFckzfW4wb1PRnhH5axNo3XkI164Sk_WHzrB9i1WoVrxIL_uYXfH7B8alvMn0nX7yXGMzbMB410kCPABhZJG98XCnzF2yO_xNhgA3fNCCHGCxkuov0kRCe2hfCV3Kp2BAIp3AC_Hdkc20GXbISTSHIaFKyn0BTN-h37fsjRO_W4xu0QZXrxA5orjOQS-Lu0axLb34axWSA."
                                 target="_blank" role="button">Help doc &raquo;</a></p>
+                        <p><a class="btn btn-secondary btn-sm" style="background-color:grey" href="https://wenhaowuengeo.github.io/ENGEO_GISToolbox/" target="_self" role="button">GIS Toolbox home &raquo;</a></p>
                         <hr class="my-4 ">
 
                         <!-- TODO - refactor into batch running, accepts multiple input files and types, just hit run once -->
@@ -401,25 +402,25 @@
     //})
 
     //check the input button
-    document
-        .getElementById("checkID0")
-        .addEventListener("click", function() {
-            //console.log("check button clicked");
-            var checkButton = document.getElementById("checkID0");
-            checkButton.style.background = "grey";
-            checkButton.style.border = "grey";
+    //document
+    //  .getElementById("checkID0")
+    //.addEventListener("click", function() {
+    //console.log("check button clicked");
+    //  var checkButton = document.getElementById("checkID0");
+    //  checkButton.style.background = "grey";
+    //  checkButton.style.border = "grey";
 
-            if (!inputfileString0) {
-                alert("Please upload a input Excel file.");
-            } else if (inputfileString0 && EDDType0) {
-                var fileInfoCopy = document.getElementById("fileInfo0");
-                //console.log("file info changed: ");
-                console.log("input file str: ", inputfileString0);
-                console.log("EDD type:", EDDType0);
-                fileInfoCopy.innerHTML = "<p style='color:#78c679;'>Input format is okay!</p>";
-            }
+    //  if (!inputfileString0) {
+    //     alert("Please upload a input Excel file.");
+    //  } else if (inputfileString0 && EDDType0) {
+    //      var fileInfoCopy = document.getElementById("fileInfo0");
+    //console.log("file info changed: ");
+    //      console.log("input file str: ", inputfileString0);
+    //      console.log("EDD type:", EDDType0);
+    //      fileInfoCopy.innerHTML = "<p style='color:#78c679;'>Input format is okay!</p>";
+    //  }
 
-        });
+    //    });
 
     //evt listener for remove the first row
     document.getElementById("crossBtn0").addEventListener("click", function(event) {
