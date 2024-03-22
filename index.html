@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="ENGEOLOGO_Favicon 1.png">
     <title>EDD Task Submission Tool</title>
+    <script src="jquery-3.7.1.min.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/heroes/">
@@ -23,82 +24,206 @@
     <!-- this legacy version does not support jobinfo -->
     <!-- <script src="https://js.arcgis.com/3.46compact/"></script> -->
 
-    <script src="index.js"></script>
+    <!-- Important: needs to import the index.js as a module type! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script src="index.js" defer></script>
+    <script>
+        //define global variables
+        var inputCount = 0; //default count
+        var actualTaskCount = 1;
+
+        var selectedFile; //initial is null
+        var UploadedEDDType0; //initial edd type from the upload
+        var EDDType0 = 'Soil'; //default type
+        //var inputfileString0 = 'placeholder';
+        var inputfileString0 = ''; //default parsed string
+
+        var result_dict = {}; //result table dict
+    </script>
+
 
 
 </head>
 
 <body>
-    <div class="jumbotron vertical-center" style="margin-top:5%;">
+    <div class="jumbotron vertical-center" id="inputMasterContainerID" style="margin-top:5%;">
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
             <div class="jumbotron text-center">
                 <div class="container">
                     <h4 style="font-weight: bold; color:#0054A4 ">Electronic Data Deliverable (EDD) Converter</h4>
                     <div class="row" style="margin:auto; width:50%;">
                         <p class="lead text-muted"><small>Convert the EDD input excel files into standard formatted EDD tables.</small></p>
-                        <p><a class="btn btn-secondary btn-sm" style="background-color:grey" href="https://mygis.engeo.com/portal/sharing/rest/content/items/c479c616c10f4edc924c1f172f92c3f2/data?token=60Qni6QOnQBly9ihSCt2Yek58FSLXwXlMEGNhFHDEmKAcCFSPx7FjyoTKtzH2JKSpk6tMVSjdAHotkDHdWgq0fVZ9SkrzkkKlrl6-grJbXQ5l-7Sd9e9YMaLg9HRTzyuBhuXc7oVp56feNOSt7QU0yIvvKeEIxBYEkd7TsdG8DzLoqJRbBkFJ0zFaUGFaK8H9nFLtTZAcslYbqwmScpl9Wohstvqy9bRKrplsGw7NaI."
+                        <p><a class="btn btn-secondary btn-sm" style="background-color:grey" href="https://mygis.engeo.com/portal/sharing/rest/content/items/ce51a6cb86e54a6c87283b3513f9699c/data?token=kifsRRFphh9kmnFbe03VGdBa5u_m10AkyDFckzfW4wb1PRnhH5axNo3XkI164Sk_WHzrB9i1WoVrxIL_uYXfH7B8alvMn0nX7yXGMzbMB410kCPABhZJG98XCnzF2yO_xNhgA3fNCCHGCxkuov0kRCe2hfCV3Kp2BAIp3AC_Hdkc20GXbISTSHIaFKyn0BTN-h37fsjRO_W4xu0QZXrxA5orjOQS-Lu0axLb34axWSA."
                                 target="_blank" role="button">Help doc &raquo;</a></p>
                         <hr class="my-4 ">
 
                         <!-- TODO - refactor into batch running, accepts multiple input files and types, just hit run once -->
-                        <!-- <p><a id="addTaskID" class="btn btn-secondary btn-sm" style="background-color:#0054A499; border:none;" href="#" target="_blank" role="button"><strong>+</strong> Add a task </a></p> -->
+                        <p><a id="addTaskID" class="btn btn-secondary btn-sm" style="background-color:#0054A499; border:none;" role="button"><strong>+</strong> Add a task </a></p>
                     </div>
                 </div>
             </div>
         </div>
 
 
-
-        <div class="container text-center">
-            <div class="row justify-content-center" id="inputRowID">
+        <!-- Start of the input row -->
+        <div class="container text-center" id="inputRowContainerID0">
+            <div class="row justify-content-center">
                 <div class="col-lg-auto">
-                    <label class="form-label" for="customFile">Upload input excel file</label>
-                    <input type="file" class="form-control" id="customFile" onchange="uploadFile()" />
+                    <label class="form-label" for="customFile0">Upload input excel file</label>
+                    <input type="file" class="form-control" id="customFile0" />
                 </div>
-                <div class="col-sm-auto">
-                    <label class="form-label" for="EDDType">Choose EDD Type</label>
-                    <select class="form-select" id="EDDType" aria-label="Choose EDD type">
-                        <!-- <option selected>Choose EDD type</option> -->
+
+                <!-- <div class="col-sm-auto">
+                    <label class="form-label" for="EDDType0">Choose EDD Type</label>
+                    <select class="form-select" id="EDDType0" aria-label="Choose EDD type">
                         <option selected value="Soil">Soil</option>
                         <option value="Groundwater">Groundwater</option>
                         <option value="Soil Gas and IA">Soil Gas and IA</option>
                     </select>
-                </div>
-                <div class="col-sm-auto">
-                    <label class="form-label" for="executionID">Execution</label>
-                    <div id="executionID">
-                        <!-- btn-lg px-4 gap-3 -->
-                        <button id="checkID" type="button" class="btn btn-primary " style="background-color:#0054A4">Check</button>
-                        <button id="runButtonID" onclick="runFunc()" type="button" class="btn btn-primary" style="background-color:#0054A4">Run</button>
-                    </div>
+                </div> -->
 
+                <div class="col-sm-auto">
+                    <label class="form-label" for="EDDTypeTextID0">EDD Type</label>
+                    <div>
+                        <p id="EDDTypeTextID0" class="font-weight-bold" style="font-weight:bold; margin-top:5%; color:#0054A4">None</p>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-auto">
+                    <label class="form-label" for="executionID">Check</label>
+                    <div id="executionID">
+                        <button id="checkID0" type="button" class="btn btn-primary " style="background-color:#0054A4">Check</button>
+                        <button id="downloadID0" type="button" class="btn btn-primary" style="background-color:grey; border-color:grey;">Download</button>
+                    </div>
+                </div> -->
+
+                <!-- get the id from this cross button's id -->
+                <div class="col-sm-auto">
+                    <button type="button" id="crossBtn0" class="btn close" aria-label="Close" style="margin-top:45%;">
+                    <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ef6548" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                      </svg></span>
+                </button>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <!-- TODO - use dynamic ids for batch new job creation -->
-                <div class="col-md-auto" style="margin-top:3%; font-weight:bold; color:#0054A4;" id="fileInfo"></div>
-                <div class="col-md-auto" style="margin-top:3%; font-weight:bold; color:#0054A4;" id="checkDivText"></div>
-                <pre id="jsonData"></pre>
+                <div class="col-md-auto" style="margin-top:3%; font-weight:bold; color:#0054A4;" id="fileInfo0"></div>
+                <div class="col-md-auto" style="margin-top:3%; font-weight:bold; color:#0054A4;" id="checkDivText0"></div>
+                <!-- <pre id="jsonData0" display="none"></pre> -->
             </div>
 
         </div>
+        <!-- End of the input row -->
 
+    </div>
+    <div class="jumbotron vertical-center text-center" style="margin-top:1%;">
+        <button id="runButtonID" onclick="runFunc()" type="button" class="btn btn-primary" style="background-color:#0054A4">Convert</button>
     </div>
     </div>
 </body>
+<!-- <script type="module" src="convert.js"></script> -->
+
 <script>
-    var selectedFile; //initial is null
-    var EDDType = 'Soil'; //default type
+    <!-- TODO - create func to store variables for each row -->
 
-    var inputfileString = 'placeholder'; //default parsed string
+    var sampleRow = document.getElementById('inputRowContainerID0');
 
-    //file upload button
+    //add new task
     document
-        .getElementById("customFile")
-        .addEventListener("change", function(event) {
+        .getElementById("addTaskID")
+        .addEventListener("click", function() {
+            inputCount++; //almost serve as a unique key
+            actualTaskCount++;
+            console.log("input count: ", inputCount);
+            console.log("a new task is added!");
+
+            //create new set of input variables
+            //window['selectedFile' + inputCount]; //initial is null - todo is this necessary?
+            //window['EDDType' + inputCount] = 'Soil';
+            window['inputfileString' + inputCount] = 'placeholder';
+
+            //create new input row and assign dynamic id for it
+            //var exstRow = document.getElementById('inputRowContainerID0');
+            var newRow = sampleRow.cloneNode(true);
+            newRow.setAttribute("id", "inputRowContainerID" + inputCount);
+            console.log("new row's id: ", newRow.id);
+
+            //assign dynamic id for new custom file input
+            var newCustomFile = newRow.querySelector('#customFile0');
+            newCustomFile.setAttribute("id", "customFile" + inputCount);
+            //console.log("new customFile input's id: ", newCustomFile.id);
+            if (inputCount >= 1) {
+                fileDetection(newCustomFile, inputCount);
+            }
+
+            //assign dynamic id for new edd type text
+            var newEDDTypeText = newRow.querySelector("#EDDTypeTextID0");
+            newEDDTypeText.setAttribute("id", "EDDTypeTextID" + inputCount);
+
+
+            //assign dynamic id for new EDD type input user selects
+            //var newEDDType = newRow.querySelector('#EDDType0');
+            //newEDDType.setAttribute("id", "EDDType" + inputCount);
+            //console.log("new EDDType input's id: ", newEDDType.id);
+            //if (inputCount >= 1) {
+            //  eddTypeSel(newEDDType, inputCount);
+            //}
+
+            //assign dynamic id for new check button
+            //var newCheckBtn = newRow.querySelector('#checkID0');
+            //newCheckBtn.setAttribute("id", "checkID" + inputCount);
+            //newCheckBtn.style.background = "#0054A4";
+            //newCheckBtn.style.border = "#0054A4";
+            //console.log("new CheckBtn's id: ", newCheckBtn.id);
+            //if (inputCount >= 1) {
+            // checkInputs(newCheckBtn, inputCount);
+            //}
+
+            //Create download buttons on the fly - assign dynamic id for new download button
+            //var newDownloadBtn = newRow.querySelector('#downloadID0');
+            //newDownloadBtn.setAttribute("id", "downloadID" + inputCount);
+            //console.log("new DownloadBtn's id: ", newDownloadBtn.id);
+            //newDownloadBtn.style.background = "grey";
+            //newDownloadBtn.style.border = "grey";
+
+
+            //assign dynamic id for new file info
+            var newFileInfo = newRow.querySelector('#fileInfo0');
+            newFileInfo.setAttribute("id", "fileInfo" + inputCount);
+            //console.log("new fileInfo's id: ", newFileInfo.id);
+
+            //assign dynamic id for CheckDivText
+            var newCheckDivText = newRow.querySelector('#checkDivText0');
+            newCheckDivText.setAttribute("id", "checkDivText" + inputCount);
+            //console.log("new CheckDivText's id: ", newCheckDivText.id);
+
+            //assign dynamic id for jsonData preview
+            //var newJsonData = newRow.querySelector('#jsonData0');
+            //newJsonData.setAttribute("id", "jsonData" + inputCount);
+            //console.log("new newJsonData's id: ", newJsonData.id);
+
+            //assign dynamic close button and new onclick id to remove
+            var newCrossBtn = newRow.querySelector('#crossBtn0');
+            newCrossBtn.setAttribute("id", "crossBtn" + inputCount);
+            if (inputCount >= 1) {
+                removeEvt(newCrossBtn, inputCount);
+            }
+            //newCrossBtn.onclick = removeTask('inputRowContainerID' + inputCount);
+
+            //append the new row after the last child of row container
+            //sampleRow.after(newRow);
+            document.getElementById("inputMasterContainerID").appendChild(newRow);
+
+        });
+
+    //Add event listerner to EACH customFile input button to detect new file submission
+    function fileDetection(newCustomFile, inputCount) {
+        //console.log("fileDetection evt listener attached for #", inputCount);
+        newCustomFile.addEventListener("change", function(event) {
             selectedFile = event.target.files[0];
+            //console.log("selected file for #", inputCount);
             if (selectedFile) {
-                var fileInfoDiv = document.getElementById("fileInfo");
+                var fileInfoDiv = document.getElementById("fileInfo" + inputCount);
                 fileInfoDiv.innerHTML = "<p>You've uploaded this file: " + selectedFile.name + "</p>";
 
                 var fileReader = new FileReader();
@@ -109,58 +234,202 @@
                         type: "binary"
                     });
 
+                    //read the edd type from uploaded file
+                    var firstSheetName = workbook.SheetNames[0];
+                    var worksheet = workbook.Sheets[firstSheetName];
+                    //console.log(worksheet);
+
+                    var sheetData = XLSX.utils.sheet_to_json(worksheet, {
+                        header: 1
+                    });
+
+                    if (sheetData.length > 1) {
+                        var fieldIdx = sheetData[0].indexOf('MATRIXNAME');
+                        if (fieldIdx !== -1 && sheetData[1]) {
+                            // Reading the value of EDD type
+                            window['UploadedEDDType' + inputCount] = sheetData[1][fieldIdx];
+                            if (window['UploadedEDDType' + inputCount] == 'Air') {
+                                console.log("air type conversion")
+                                window['UploadedEDDType' + inputCount] = 'Soil Gas and IA'
+                            } else if (window['UploadedEDDType' + inputCount] == 'Water') {
+                                console.log("water type conversion")
+                                window['UploadedEDDType' + inputCount] = 'Groundwater'
+                            }
+
+                            console.log("uploaded file edd type: ", window['UploadedEDDType' + inputCount]);
+
+                            document.getElementById('EDDTypeTextID' + inputCount).innerText = window['UploadedEDDType' + inputCount];
+                        }
+                    }
+
+
                     workbook.SheetNames.forEach(sheet => {
                         let rowObject = XLSX.utils.sheet_to_row_object_array(
                             workbook.Sheets[sheet]
                         );
                         let jsonObject = JSON.stringify(rowObject);
-                        inputfileString = jsonObject;
-                        document.getElementById("jsonData").innerHTML = jsonObject;
-                        console.log(jsonObject);
+                        //assign the json string from the input file
+                        window['inputfileString' + inputCount] = jsonObject;
+                        //document.getElementById("jsonData" + inputCount).innerHTML = jsonObject;
+                        //console.log("uploaded file #" + inputCount + ":", window['inputfileString' + inputCount]);
                     });
                 };
                 fileReader.readAsBinaryString(selectedFile);
             }
+        })
+    }
+
+    //Add event listerner to EACH EDD type selection button to mark new type
+    //function eddTypeSel(newEDDType, inputCount) {
+    //console.log("EDD type sel evt listener attached for #", inputCount);
+    //newEDDType.addEventListener("change", function(event) {
+    //window['EDDType' + inputCount] = document.getElementById('EDDType' + //inputCount).value;
+    // console.log("selected EDD type for #" + inputCount + ":", window['EDDType' + inputCount]);
+    //})
+    // }
+
+    //Add event listerner to EACH check button to verify user inputs
+    //function checkInputs(newCheckBtn, inputCount) {
+    //   newCheckBtn.addEventListener("click", function() {
+    //     var checkButton = document.getElementById("checkID" + inputCount);
+    //  checkButton.style.background = "grey";
+    //checkButton.style.border = "grey";
+
+    //if (!window['inputfileString' + inputCount]) {
+    //  alert("Please upload an input Excel file.");
+    //} else if (window['inputfileString' + inputCount] && window['UploadedEDDType' + inputCount]) {
+    //    var fileInfoCopy = document.getElementById("fileInfo" + inputCount);
+    //  console.log("input file str #" + inputCount + ":", window['inputfileString' + inputCount]);
+    //console.log("EDD type #" + inputCount + ":", window['UploadedEDDType' + inputCount]);
+    //fileInfoCopy.innerHTML = "<p style='color:#78c679;'>Input format is okay!</p>";
+    //}
+
+    //});
+    //}
+
+    //Add event listerner to EACH cross button to remove each row
+    function removeEvt(newCrossBtn, inputCount) {
+        newCrossBtn.addEventListener("click", function(event) {
+            //var ind = newCrossBtn.id;
+            var row = document.getElementById('inputRowContainerID' + inputCount);
+            if (row) {
+                row.remove();
+                console.log("removed this task: ", inputCount);
+                actualTaskCount--;
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+    <!-- TODO - Generalize the default input row event listeners -->
+    //Add event listeners to the default first input row
+    document
+        .getElementById("customFile0")
+        .addEventListener("change", function(event) {
+            selectedFile = event.target.files[0];
+            if (selectedFile) {
+                var fileInfoDiv = document.getElementById("fileInfo0");
+                fileInfoDiv.innerHTML = "<p>You've uploaded this file: " + selectedFile.name + "</p>";
+
+                var fileReader = new FileReader();
+                fileReader.onload = function(event) { //assign table string to inputfileString after the read completes
+                    var data = event.target.result;
+
+                    var workbook = XLSX.read(data, {
+                        type: "binary"
+                    });
+
+                    //read the edd type from uploaded file
+                    var firstSheetName = workbook.SheetNames[0];
+                    var worksheet = workbook.Sheets[firstSheetName];
+                    //console.log(worksheet);
+
+                    var sheetData = XLSX.utils.sheet_to_json(worksheet, {
+                        header: 1
+                    });
+
+                    if (sheetData.length > 1) {
+                        var fieldIdx = sheetData[0].indexOf('MATRIXNAME');
+                        if (fieldIdx !== -1 && sheetData[1]) {
+                            // Reading the value of EDD type
+                            UploadedEDDType0 = sheetData[1][fieldIdx];
+                            console.log("up0: ", UploadedEDDType0)
+                            if (UploadedEDDType0 == 'Air') {
+                                console.log("air type conversion")
+                                UploadedEDDType0 = 'Soil Gas and IA'
+                            } else if (UploadedEDDType0 == 'Water') {
+                                console.log("water type conversion")
+                                UploadedEDDType0 = 'Groundwater'
+                            }
+                            console.log("uploaded file edd type: ", UploadedEDDType0);
+                            window['UploadedEDDType0'] = UploadedEDDType0;
+
+                            document.getElementById('EDDTypeTextID0').innerText = window['UploadedEDDType0'];
+                        }
+                    }
+
+                    workbook.SheetNames.forEach(sheet => {
+                        let rowObject = XLSX.utils.sheet_to_row_object_array(
+                            workbook.Sheets[sheet]
+                        );
+                        let jsonObject = JSON.stringify(rowObject);
+                        inputfileString0 = jsonObject;
+                        //document.getElementById("jsonData0").innerHTML = jsonObject;
+                        //console.log("uploaded file #", jsonObject);
+                    });
+                };
+                <!-- TODO - replace this with readAsArrayBuffer() method -->;
+                //https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsBinaryString
+                fileReader.readAsBinaryString(selectedFile); //read the uploaded file
+            }
         });
 
+
+
     //choose EDD type button
-    document
-        .getElementById("EDDType")
-        .addEventListener("change", function(event) {
-            EDDType = document.getElementById('EDDType').value;
-            console.log("selected EDD type: ", EDDType);
-        })
+    //document
+    //.getElementById("EDDType0")
+    //.addEventListener("change", function(event) {
+    // EDDType0 = document.getElementById('EDDType0').value;
+    // console.log("selected EDD type: ", EDDType0);
+    //})
 
     //check the input button
     document
-        .getElementById("checkID")
+        .getElementById("checkID0")
         .addEventListener("click", function() {
-            console.log("check button clicked");
-            var checkButton = document.getElementById("checkID");
+            //console.log("check button clicked");
+            var checkButton = document.getElementById("checkID0");
             checkButton.style.background = "grey";
             checkButton.style.border = "grey";
 
-            if (!selectedFile) {
+            if (!inputfileString0) {
                 alert("Please upload a input Excel file.");
-            } else if (selectedFile && EDDType) {
-                var fileInfo2 = document.getElementById("fileInfo");
-                console.log("file info changed: ");
-                console.log("input file str: ", inputfileString);
-                console.log("EDD type:", EDDType);
-                fileInfo2.innerHTML = "<p>Input format is okay! Click run to execute the task</p>";
+            } else if (inputfileString0 && EDDType0) {
+                var fileInfoCopy = document.getElementById("fileInfo0");
+                //console.log("file info changed: ");
+                console.log("input file str: ", inputfileString0);
+                console.log("EDD type:", EDDType0);
+                fileInfoCopy.innerHTML = "<p style='color:#78c679;'>Input format is okay!</p>";
             }
 
         });
 
-    //add new task
-    document
-        .getElementById("addTaskID")
-        .addEventListener("click", function() {
-            alert("a new task is added!");
-            var newRow = document.getElementById('inputRowID').clone();
-
-
-        });
+    //evt listener for remove the first row
+    document.getElementById("crossBtn0").addEventListener("click", function(event) {
+        var row = document.getElementById('inputRowContainerID0');
+        if (row) {
+            row.remove();
+            console.log("removed this task: 0");
+            actualTaskCount--;
+        }
+    });
 </script>
 
 </html>
