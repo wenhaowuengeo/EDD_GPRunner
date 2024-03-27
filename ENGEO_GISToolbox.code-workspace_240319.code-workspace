@@ -1,10 +1,12 @@
 {
-    "folders": [
-		{
+	"folders": [{
 			"path": "../ENGEO_GISToolbox"
 		},
 		{
 			"path": "."
+		},
+		{
+			"path": "../ENGEO_PhotoGenerator"
 		}
 	]
 }
